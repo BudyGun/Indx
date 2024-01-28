@@ -51,11 +51,8 @@ FROM payment p
 JOIN rental r ON p.rental_id = r.rental_id JOIN customer c ON r.customer_id = c.customer_id JOIN inventory i ON i.inventory_id = r.inventory_id
 WHERE p.payment_date >= '2005-07-30' AND p.payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY);
 ```
+![alt text](https://github.com/BudyGun/Indx/blob/main/images/i7.png)
 
-
-![alt text](https://github.com/BudyGun/Indx/blob/main/images/i2.png)
-![alt text](https://github.com/BudyGun/Indx/blob/main/images/i3.png)
-![alt text](https://github.com/BudyGun/Indx/blob/main/images/i4.png)
 
 
 ## Дополнительные задания (со звёздочкой*)
