@@ -22,7 +22,7 @@
 SELECT table_schema as name_of_DB, CONCAT(ROUND((SUM(index_length))*100/(SUM(data_length+index_length)),2),'%') '% index'
     FROM information_schema.TABLES where TABLE_SCHEMA = 'sakila';
 ```
-![alt text](https://github.com/BudyGun/sql-2/blob/main/images/i1.png)
+![alt text](https://github.com/BudyGun/Indx/blob/main/images/i1.png)
 
 
 ### Задание 2
