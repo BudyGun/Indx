@@ -43,10 +43,15 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 Очевидно, узким местом является обработка излишних таблиц - inventory, rental и film. Данная обработка увеливает время обработки запроса, и для данного запроса не имеет смысла. Все необходимые данные 
 уже есть в payment и customer. Соответственно оптимизированный запрос будет выглядеть следующим образом:
 ```
-select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
-from payment p, customer c
-where date(p.payment_date) = '2005-07-30' and p.customer_id = c.customer_id 
+CREATE INDEX idx_payment_date ON payment(payment_date);
+
+SELECT DISTINCT CONCAT(c.last_name, ' ', c.first_name), SUM(p.amount) OVER (PARTITION BY c.customer_id)
+FROM payment p 
+JOIN rental r ON p.rental_id = r.rental_id JOIN customer c ON r.customer_id = c.customer_id JOIN inventory i ON i.inventory_id = r.inventory_id
+WHERE p.payment_date >= '2005-07-30' AND p.payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY);
 ```
+
+
 ![alt text](https://github.com/BudyGun/Indx/blob/main/images/i2.png)
 ![alt text](https://github.com/BudyGun/Indx/blob/main/images/i3.png)
 ![alt text](https://github.com/BudyGun/Indx/blob/main/images/i4.png)
