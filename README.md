@@ -18,6 +18,9 @@
 ### Задание 1
 
 Напишите запрос к учебной базе данных, который вернёт процентное отношение общего размера всех индексов к общему размеру всех таблиц.   
+
+### Решение 1
+
 ```
 SELECT table_schema as name_of_DB, CONCAT(ROUND((SUM(index_length))*100/(SUM(data_length+index_length)),2),'%') '% index'
     FROM information_schema.TABLES where TABLE_SCHEMA = 'sakila';
@@ -35,6 +38,19 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 ```
 - перечислите узкие места;
 - оптимизируйте запрос: внесите корректировки по использованию операторов, при необходимости добавьте индексы.
+
+### Решение 2   
+Очевидно, узким местом является обработка излишних таблиц - inventory, rental и film. Данная обработка увеливает время обработки запроса, и для данного запроса не имеет смысла. Все необходимые данные 
+уже есть в payment и customer. Соответственно оптимизированный запрос будет выглядеть следующим образом:
+```
+select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
+from payment p, customer c
+where date(p.payment_date) = '2005-07-30' and p.customer_id = c.customer_id 
+```
+![alt text](https://github.com/BudyGun/Indx/blob/main/images/i2.png)
+![alt text](https://github.com/BudyGun/Indx/blob/main/images/i3.png)
+![alt text](https://github.com/BudyGun/Indx/blob/main/images/i4.png)
+
 
 ## Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
